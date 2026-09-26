@@ -1,0 +1,150 @@
+{
+  "seed": 42,
+  "train_entities": 10000,
+  "validation_entities": 5000,
+  "train_candidate_pairs": 1156906,
+  "train_positive_candidate_pairs": 29925,
+  "train_candidate_recall_not_evaluated": "Training sample recall is not used for tuning.",
+  "validation_candidate_pairs": 580776,
+  "candidate_recall": 0.865625725563037,
+  "candidate_reduction_ratio": 0.9999887448900067,
+  "threshold_sweep": {
+    "best": {
+      "threshold": 0.99,
+      "macro_f0_5": 0.7618922528858905,
+      "predicted_links": 14402
+    },
+    "grid": [
+      {
+        "threshold": 0.2,
+        "macro_f0_5": 0.4489409155585858,
+        "predicted_links": 46258
+      },
+      {
+        "threshold": 0.25,
+        "macro_f0_5": 0.4870982509986007,
+        "predicted_links": 39935
+      },
+      {
+        "threshold": 0.3,
+        "macro_f0_5": 0.518409044903808,
+        "predicted_links": 35703
+      },
+      {
+        "threshold": 0.35,
+        "macro_f0_5": 0.5437048196900277,
+        "predicted_links": 32680
+      },
+      {
+        "threshold": 0.4,
+        "macro_f0_5": 0.5717668578670879,
+        "predicted_links": 29619
+      },
+      {
+        "threshold": 0.45,
+        "macro_f0_5": 0.5934393973249972,
+        "predicted_links": 27786
+      },
+      {
+        "threshold": 0.5,
+        "macro_f0_5": 0.6120232989163372,
+        "predicted_links": 26291
+      },
+      {
+        "threshold": 0.55,
+        "macro_f0_5": 0.6290512419207108,
+        "predicted_links": 25098
+      },
+      {
+        "threshold": 0.6,
+        "macro_f0_5": 0.6534713985927517,
+        "predicted_links": 23497
+      },
+      {
+        "threshold": 0.65,
+        "macro_f0_5": 0.6697758750434913,
+        "predicted_links": 22343
+      },
+      {
+        "threshold": 0.7,
+        "macro_f0_5": 0.6848195719206002,
+        "predicted_links": 21582
+      },
+      {
+        "threshold": 0.75,
+        "macro_f0_5": 0.6987282089688567,
+        "predicted_links": 20800
+      },
+      {
+        "threshold": 0.8,
+        "macro_f0_5": 0.7099139524931841,
+        "predicted_links": 20104
+      },
+      {
+        "threshold": 0.85,
+        "macro_f0_5": 0.7242471981890733,
+        "predicted_links": 19146
+      },
+      {
+        "threshold": 0.9,
+        "macro_f0_5": 0.7345478007660788,
+        "predicted_links": 18281
+      },
+      {
+        "threshold": 0.95,
+        "macro_f0_5": 0.7476197961883626,
+        "predicted_links": 17078
+      },
+      {
+        "threshold": 0.97,
+        "macro_f0_5": 0.7532717805169001,
+        "predicted_links": 16203
+      },
+      {
+        "threshold": 0.98,
+        "macro_f0_5": 0.7581710739036889,
+        "predicted_links": 15569
+      },
+      {
+        "threshold": 0.99,
+        "macro_f0_5": 0.7618922528858905,
+        "predicted_links": 14402
+      },
+      {
+        "threshold": 0.995,
+        "macro_f0_5": 0.7583425759494404,
+        "predicted_links": 13315
+      }
+    ]
+  },
+  "feature_names": [
+    "name_exact",
+    "name_compact_exact",
+    "name_ratio",
+    "name_token_sort",
+    "name_token_set",
+    "name_wratio",
+    "name_jaccard",
+    "name_shared_tokens",
+    "name_token_containment",
+    "name_length_ratio",
+    "address_exact",
+    "address_ratio",
+    "address_token_sort",
+    "address_token_set",
+    "address_jaccard",
+    "address_shared_tokens",
+    "address_numeric_overlap",
+    "country_exact",
+    "source2_candidate",
+    "source3_candidate",
+    "block_exact_name",
+    "block_compact_name",
+    "block_exact_address",
+    "block_fts_name",
+    "block_fts_address"
+  ],
+  "training_positive_fraction": 0.02586640574082942,
+  "note": "Validation and training use disjoint Source 1 entities sampled from the fixed 80/20 split.",
+  "elapsed_seconds": 1639.9
+}

@@ -1,46 +1,26 @@
-# =========================
-# Amazon ML Challenge Data
-# =========================
-
+# Challenge datasets stay local and are not committed.
 data/
 
-# =========================
-# Python
-# =========================
-
+# Python and Jupyter
 .venv/
 __pycache__/
 *.py[cod]
-
-# =========================
-# Jupyter
-# =========================
-
 .ipynb_checkpoints/
 
-# =========================
-# Models
-# =========================
-
+# Local model artifacts
 models/*.pkl
 models/*.joblib
+models/indexes/
+models/*.sqlite*
 
-# =========================
-# Temporary / logs
-# =========================
-
+# Temporary files and local editor/OS metadata
 *.log
 *.tmp
-
-# =========================
-# VS Code
-# =========================
-
 .vscode/
-
-# =========================
-# OS
-# =========================
-
+.miktex-userconfig/
 .DS_Store
 Thumbs.db
+
+# Regenerable entity-level split derived from local challenge data
+outputs/validation/source1_split.tsv
+outputs/final/*.tsv
