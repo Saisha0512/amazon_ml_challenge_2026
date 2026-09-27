@@ -14,6 +14,12 @@ from . import config
 from .normalization import compact_name, normalize_address, normalize_country, normalize_name, text_tokens
 
 _RECORD_COLUMNS = ("entity_id", "source", "country", "name_norm", "name_compact", "name_prefix", "address_norm")
+_EXACT_BLOCK_SQL = " UNION ALL ".join(f"SELECT * FROM ({branch})" for branch in [
+    "SELECT rowid,entity_id,source,country,name_norm,name_compact,name_prefix,address_norm,'name_exact' AS rule FROM records WHERE source=? AND country=? AND name_norm=? LIMIT ?",
+    "SELECT rowid,entity_id,source,country,name_norm,name_compact,name_prefix,address_norm,'name_compact' AS rule FROM records WHERE source=? AND country=? AND name_compact=? LIMIT ?",
+    "SELECT rowid,entity_id,source,country,name_norm,name_compact,name_prefix,address_norm,'name_prefix' AS rule FROM records WHERE source=? AND country=? AND name_prefix=? LIMIT ?",
+    "SELECT rowid,entity_id,source,country,name_norm,name_compact,name_prefix,address_norm,'address_exact' AS rule FROM records WHERE source=? AND country=? AND address_norm=? LIMIT ?",
+])
 
 
 def connect_index(path: str | Path) -> sqlite3.Connection:
@@ -151,18 +157,12 @@ def generate_candidates(con: sqlite3.Connection, business_name: str,
         return []
     candidates: dict[int, dict] = {}
     for source in ("S2", "S3"):
-        sql = " UNION ALL ".join(f"SELECT * FROM ({branch})" for branch in [
-            "SELECT rowid,entity_id,source,country,name_norm,name_compact,name_prefix,address_norm,'name_exact' AS rule FROM records WHERE source=? AND country=? AND name_norm=? LIMIT ?",
-            "SELECT rowid,entity_id,source,country,name_norm,name_compact,name_prefix,address_norm,'name_compact' AS rule FROM records WHERE source=? AND country=? AND name_compact=? LIMIT ?",
-            "SELECT rowid,entity_id,source,country,name_norm,name_compact,name_prefix,address_norm,'name_prefix' AS rule FROM records WHERE source=? AND country=? AND name_prefix=? LIMIT ?",
-            "SELECT rowid,entity_id,source,country,name_norm,name_compact,name_prefix,address_norm,'address_exact' AS rule FROM records WHERE source=? AND country=? AND address_norm=? LIMIT ?",
-        ])
         params = (source, country_norm, name, config.BLOCK_EXACT_LIMIT,
                   source, country_norm, compact, config.BLOCK_EXACT_LIMIT,
                   source, country_norm, name[:5], config.BLOCK_PREFIX_POOL_SIZE,
                   source, country_norm, address, config.BLOCK_EXACT_LIMIT)
         prefix_rows = []
-        for row in con.execute(sql, params):
+        for row in con.execute(_EXACT_BLOCK_SQL, params):
             if row["rule"] == "name_prefix":
                 prefix_rows.append(row)
                 continue

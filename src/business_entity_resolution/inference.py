@@ -11,7 +11,7 @@ import numpy as np
 from . import config
 from .blocking import generate_candidates
 from .data_loader import iter_tsv
-from .features import FEATURE_NAMES, pair_features
+from .features import FEATURE_NAMES, pair_feature_vector
 from .normalization import normalize_address, normalize_country, normalize_name
 
 
@@ -66,9 +66,9 @@ def candidate_feature_matrix(connection, source1_rows):
                                          source1["business_address"], source1["country"])
         candidate_sets[s1_id] = {c["entity_id"] for c in candidates}
         start = len(feature_rows)
-        feature_rows.extend([pair_features(source1, candidate) for candidate in candidates])
+        feature_rows.extend(pair_feature_vector(source1, candidate) for candidate in candidates)
         groups.append((s1_id, candidates, start, len(feature_rows)))
-    matrix = np.asarray([[features[name] for name in FEATURE_NAMES] for features in feature_rows], dtype=np.float32)
+    matrix = np.asarray(feature_rows, dtype=np.float32)
     if not feature_rows:
         matrix = np.empty((0, len(FEATURE_NAMES)), dtype=np.float32)
     return matrix, groups, candidate_sets
@@ -135,14 +135,24 @@ def score_rows(connection, source1_path, model, threshold: float,
                     mw.writerow([s1_id, ""])
                     cw.writerow([s1_id, ""])
                     if total_entities % 2_000 == 0:
-                        print(f"Final inference: processed {total_entities:,} Source 1 entities; {total_pairs:,} candidates", flush=True)
+                        print(
+                            f"Output rows generated: {total_entities:,} matching_results.tsv rows; "
+                            f"{total_entities:,} candidate_pairs.tsv rows; "
+                            f"{total_pairs:,} candidate IDs",
+                            flush=True,
+                        )
                     continue
                 matched = [candidate["entity_id"] for candidate, score in zip(candidates, scores[start:end]) if score >= threshold]
                 cw.writerow([s1_id, ",".join(c["entity_id"] for c in candidates)])
                 mw.writerow([s1_id, ",".join(matched)])
                 total_matches += len(matched)
                 if total_entities % 2_000 == 0:
-                    print(f"Final inference: processed {total_entities:,} Source 1 entities; {total_pairs:,} candidates", flush=True)
+                    print(
+                        f"Output rows generated: {total_entities:,} matching_results.tsv rows; "
+                        f"{total_entities:,} candidate_pairs.tsv rows; "
+                        f"{total_pairs:,} candidate IDs",
+                        flush=True,
+                    )
         for source1 in read_source_rows(source1_path):
             batch.append(source1)
             if len(batch) >= chunk_entities:

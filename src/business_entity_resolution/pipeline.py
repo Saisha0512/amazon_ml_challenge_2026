@@ -132,7 +132,7 @@ def final_inference(threshold: float | None = None) -> dict:
         result.update(score_rows(
             con, config.TEST_FILES["source1"], artifact["model"], threshold,
             config.FINAL_OUTPUT_DIR / "matching_results.tsv",
-            config.FINAL_OUTPUT_DIR / "candidate_pairs.tsv", chunk_entities=250))
+            config.FINAL_OUTPUT_DIR / "candidate_pairs.tsv", chunk_entities=500))
     finally:
         con.close()
     result["threshold"] = threshold
